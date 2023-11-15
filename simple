@@ -13,13 +13,24 @@ int main() {
         printf("$ ");
         if (fgets(cmd, sizeof(cmd), stdin) == NULL) {
             printf("\n");
-            exit(0);
+            exit(EXIT_SUCCESS);
         }
-        cmd[strlen(cmd) - 1] = '\0';  // remove newline at the end
+        // Remove newline at the end
+        cmd[strlen(cmd) - 1] = '\0';
+
+        // Check if the input is too long
+        if (strlen(cmd) >= MAX_CMD_LEN - 1) {
+            printf("Command is too long\n");
+            continue;
+        }
+
         if (access(cmd, F_OK) != -1) {
             char *argv[] = {cmd, NULL};
+            // Display an error message before execve
+            perror("");  // Will print the error message if execve fails
             if (execve(cmd, argv, environ) == -1) {
                 perror("Error executing command");
+                exit(EXIT_FAILURE);  // Exit with failure status
             }
         } else {
             printf("%s: command not found\n", cmd);
