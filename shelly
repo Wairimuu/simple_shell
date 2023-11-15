@@ -1,0 +1,35 @@
+## Bing
+Creating a fully functional bash shell in C is a complex task that involves understanding of low-level system calls, process management, and more. However, I can provide you with a simple example of a shell in C that can execute basic commands. This is a very basic implementation and does not include features like piping, redirection, or scripting.
+Here is a simple shell in C:
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/wait.h>
+
+void loop(void) {
+    char *line = NULL;
+    size_t len = 0;
+    ssize_t read;
+
+    while ((read = getline(&line, &len, stdin)) != -1) {
+        system(line);
+    }
+
+    free(line);
+}
+
+int main(void) {
+    loop();
+    return EXIT_SUCCESS;
+}
+
+This program reads lines from the standard input and executes them using the system function. Please note that the system function is not safe for executing untrusted input, as it invokes the command processor (bash, in this case), which can interpret special characters and subcommands.
+To compile and run this program, save it to a file named shell.c, then use the following commands:
+
+gcc -o shell shell.c
+./shell
+
+Please note that creating a fully functional shell is beyond the scope of this example and would require a more complex program. If you're interested in this topic, I recommend studying operating systems and C programming in more depth. There are also many open-source shell implementations available online that you can study.
+
